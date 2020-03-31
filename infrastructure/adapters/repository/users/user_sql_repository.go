@@ -9,26 +9,26 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type UserPostgresRepository struct {
+type UserSqlRepository struct {
 	Db *gorm.DB
 }
 
-func (userPostgresRepository *UserPostgresRepository) UpdateQuantityMovies(DNI int64) (model.User, error) {
+func (userPostgresRepository *UserSqlRepository) UpdateQuantityMovies(DNI int64) (*model.User, error) {
 
 	var userDb models.UserDb
 	if userPostgresRepository.Db.First(&userDb, DNI).RecordNotFound() {
-		return model.User{}, errors.New(fmt.Sprintf("user not found %v", DNI))
+		return nil, errors.New(fmt.Sprintf("user not found %v", DNI))
 	}
 
 	if userPostgresRepository.Db.Model(&userDb).Update("quantity_movies", gorm.Expr("quantity_movies  + ?", 1)).Error != nil {
-		return model.User{}, errors.New(fmt.Sprintf("error when updated user %v", DNI))
+		return nil, errors.New(fmt.Sprintf("error when updated user %v", DNI))
 	}
 	user := users_mapper.UserDbToUser(userDb)
 
-	return user, nil
+	return &user, nil
 }
 
-func (userPostgresRepository *UserPostgresRepository) GetByDNI(DNI int64) (model.User, error) {
+func (userPostgresRepository *UserSqlRepository) GetByDNI(DNI int64) (model.User, error) {
 
 	var userDb models.UserDb
 	if userPostgresRepository.Db.First(&userDb, DNI).Error != nil {
