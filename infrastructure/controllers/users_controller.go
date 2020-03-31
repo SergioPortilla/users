@@ -1,10 +1,12 @@
 package controllers
 
 import (
-	"github.com/ceiba-meli-demo/users/application/usescases"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/ceiba-meli-demo/users/application/usescases"
+	"github.com/ceiba-meli-demo/users/infrastructure/utils/rest_errors"
+	"github.com/gin-gonic/gin"
 )
 
 type RedirectUserHandler interface {
@@ -13,8 +15,8 @@ type RedirectUserHandler interface {
 }
 
 type Handler struct {
-	GetUserUseCase          usescases.GetByDniUseCase
-	UseCaseUpdateUser       usescases.UpdateUserUseCase
+	GetUserUseCase    usescases.GetByDniUseCase
+	UseCaseUpdateUser usescases.UpdateUserUseCase
 }
 
 func (h *Handler) Update(c *gin.Context) {
@@ -25,6 +27,8 @@ func (h *Handler) Get(c *gin.Context) {
 
 	userId, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if userErr != nil {
+		restErr := rest_errors.NewBadRequestError("user_id should be valid")
+		c.JSON(restErr.Status(), restErr)
 		return
 	}
 	user, errGet := h.GetUserUseCase.Handler(userId)
