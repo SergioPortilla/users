@@ -3,6 +3,6 @@ package ports
 import "github.com/ceiba-meli-demo/users/domain/model"
 
 type UsersRepository interface {
-	Get(DNI int16) (model.User, error)
-	Update(DNI int16, user model.User) (*model.User, error)
+	GetByDNI(DNI int64) (model.User, error)
+	UpdateQuantityMovies(DNI int64, user model.User) (*model.User, error)
 }
