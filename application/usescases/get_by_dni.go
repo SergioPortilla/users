@@ -6,7 +6,7 @@ import (
 )
 
 type GetByDniUseCase interface {
-	Handler(DNI int64) ([]model.User, error)
+	Handler(DNI int64) (model.User, error)
 }
 type UseCaseGetByDni struct {
 	UserRepository ports.UsersRepository
