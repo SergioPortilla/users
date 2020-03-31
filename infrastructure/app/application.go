@@ -47,7 +47,7 @@ func newHandler(getUserUseCase usescases.GetByDniUseCase, updateUserUseCase uses
 }
 
 func getUsersRepository() ports.UsersRepository {
-	return &users.UserPostgresRepository{
+	return &users.UserSqlRepository{
 		Db: database_client.GetDatabaseInstance(),
 	}
 }

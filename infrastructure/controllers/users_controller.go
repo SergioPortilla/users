@@ -20,18 +20,28 @@ type Handler struct {
 }
 
 func (h *Handler) Update(c *gin.Context) {
+	dni, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userErr != nil {
+		return
+	}
+	user, errGet := h.UseCaseUpdateUser.Handler(dni)
+	if errGet != nil {
+		_ = c.Error(errGet)
+		return
+	}
 
+	c.JSON(http.StatusOK, user)
 }
 
 func (h *Handler) Get(c *gin.Context) {
 
-	userId, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	dni, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if userErr != nil {
 		restErr := rest_errors.NewBadRequestError("user_id should be valid")
 		c.JSON(restErr.Status(), restErr)
 		return
 	}
-	user, errGet := h.GetUserUseCase.Handler(userId)
+	user, errGet := h.GetUserUseCase.Handler(dni)
 	if errGet != nil {
 		_ = c.Error(errGet)
 		return
