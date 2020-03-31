@@ -7,10 +7,20 @@ import (
 	"strconv"
 )
 
+type RedirectUserHandler interface {
+	Get(c *gin.Context)
+	Update(c *gin.Context)
+}
+
 type Handler struct {
 	GetUserUseCase          usescases.GetByDniUseCase
 	UseCaseUpdateUser       usescases.UpdateUserUseCase
 }
+
+func (h *Handler) Update(c *gin.Context) {
+
+}
+
 func (h *Handler) Get(c *gin.Context) {
 
 	userId, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
