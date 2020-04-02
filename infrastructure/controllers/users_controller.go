@@ -22,6 +22,8 @@ type Handler struct {
 func (h *Handler) Update(c *gin.Context) {
 	dni, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if userErr != nil {
+		restErr := rest_errors.NewBadRequestError("user_id should be valid")
+		c.JSON(restErr.Status(), restErr)
 		return
 	}
 	user, errGet := h.UseCaseUpdateUser.Handler(dni)
