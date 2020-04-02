@@ -6,14 +6,14 @@ import (
 )
 
 type UpdateUserUseCase interface {
-	Handler(DNI int64) (*model.User, error)
+	Handler(DNI int64) (*model.Message, error)
 }
 
 type UseCaseUpdateUser struct {
 	UserRepository ports.UsersRepository
 }
 
-func (useCaseUpdateUser *UseCaseUpdateUser) Handler(DNI int64) (*model.User, error) {
+func (useCaseUpdateUser *UseCaseUpdateUser) Handler(DNI int64) (*model.Message, error) {
 	userUpdated, err := useCaseUpdateUser.UserRepository.UpdateQuantityMovies(DNI)
 	if err != nil {
 		return userUpdated, err

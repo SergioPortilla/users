@@ -6,16 +6,16 @@ import (
 )
 
 type GetByDniUseCase interface {
-	Handler(DNI int64) (model.User, error)
+	Handler(DNI int64) (*model.User, error)
 }
 type UseCaseGetByDni struct {
 	UserRepository ports.UsersRepository
 }
 
-func (useCaseGetByDni *UseCaseGetByDni) Handler(DNI int64) (model.User, error) {
+func (useCaseGetByDni *UseCaseGetByDni) Handler(DNI int64) (*model.User, error) {
 	user, err := useCaseGetByDni.UserRepository.GetByDNI(DNI)
 	if err != nil {
-		return model.User{}, err
+		return nil, err
 	}
 	return user, nil
 }
