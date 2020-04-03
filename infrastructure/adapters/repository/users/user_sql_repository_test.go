@@ -56,7 +56,6 @@ func load() (testcontainers.Container, context.Context) {
 	userSqlRepository = UserSqlRepository{
 		Db: database_client.GetDatabaseInstance(),
 	}
-	fmt.Print("puerto test en uso : ", port)
 	return postgresC, ctx
 }
 
@@ -81,7 +80,31 @@ func TestUserSqlRepository_Update(t *testing.T) {
 	assert.EqualValues(t, msg.Done, true)
 }
 
-func TestUserSqlRepository_Get(t *testing.T) {
+func TestUpdateQuantityMovies(t *testing.T) {
+	tx := userSqlRepository.Db.Begin()
+	defer tx.Rollback()
+	var user model.User
+	
+	user, _ = user.CreateUser(77, "usuario3", "Test", 8)
+	var userDb models.UserDb
+	userDb = users_mapper.UserToUserDb(user)
+	if err := userSqlRepository.Db.Create(&userDb).Error; err != nil {
+		assert.Fail(t, err.Error())
+	}
+
+	msg, err := userSqlRepository.UpdateQuantityMovies(userDb.DNI)
+	assert.Nil(t, err)
+	assert.EqualValues(t, msg.Done, true)
+}
+
+func TestUpdateQuantityMoviesNotFound(t *testing.T) {
+	tx := userSqlRepository.Db.Begin()
+	defer tx.Rollback()
+	_, err := userSqlRepository.UpdateQuantityMovies(-100)
+	assert.NotNil(t, err)
+}
+
+func TestUserSqlRepository_Get(t *testing.T) { 
 
 	tx := userSqlRepository.Db.Begin()
 	defer tx.Rollback()
@@ -97,5 +120,5 @@ func TestUserSqlRepository_Get(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, user)
 	assert.EqualValues(t, userDb.DNI, userRes.DNI)
-	assert.EqualValues(t, "Tests", userRes.LastName)
+	assert.EqualValues(t, "Test", userRes.LastName)
 }
