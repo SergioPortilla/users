@@ -18,7 +18,7 @@ func (m *useCaseGetByDniMock) GetByDni(DNI int64) bool {
 func TestGetByDni(t *testing.T) {
 	getUserByDni := new(useCaseGetByDniMock)
 
-	getUserByDni.On("Get user by dni", 1031142378).Return(true)
+	getUserByDni.On("GetByDni", 1031142378).Return(true)
 
 	getByDniUseCase := GetByDniUseCase{getUserByDni}
 
