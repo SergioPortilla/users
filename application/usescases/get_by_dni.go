@@ -15,7 +15,7 @@ type UseCaseGetByDni struct {
 func (useCaseGetByDni *UseCaseGetByDni) Handler(DNI int64) (*model.User, error) {
 	user, err := useCaseGetByDni.UserRepository.GetByDNI(DNI)
 	if err != nil {
-		return nil, err
+		return user, err
 	}
 	return user, nil
 }

@@ -33,8 +33,11 @@ func (userPostgresRepository *UserSqlRepository) UpdateQuantityMovies(DNI int64)
 func (userPostgresRepository *UserSqlRepository) GetByDNI(DNI int64) (*model.User, error) {
 
 	userDb, error := findByDNI(userPostgresRepository, DNI)
+	if error != nil {
+		return nil, error
+	}
 	user := users_mapper.UserDbToUser(*userDb)
-	return &user, error
+	return &user, nil
 
 }
 
