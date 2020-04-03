@@ -18,16 +18,17 @@ const (
 	envHostName = "POSTGRES_HOST"
 )
 
-var (
-	UserName = os.Getenv(envUserName)                       // "root"
-	Password = os.Getenv(envPassword)                       // "root"
-	DBName   = os.Getenv(envDBName)                         // "users"
-	Port, _  = strconv.ParseInt(os.Getenv(envPort), 10, 64) // 5432
-	HostName = os.Getenv(envHostName)                       // "postgres"
-)
+
 
 func GetDatabaseInstance() *gorm.DB {
-	dataSource := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable", HostName, Port, UserName, DBName, Password)
+	
+		userName := os.Getenv(envUserName)                       // "root"
+		password := os.Getenv(envPassword)                       // "root"
+		dBName   := os.Getenv(envDBName)                         // "users"
+		port, _  := strconv.ParseInt(os.Getenv(envPort), 10, 64) // 5432
+		hostName := os.Getenv(envHostName)                       // "postgres"
+	
+	dataSource := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable", hostName, port, userName, dBName, password)
 
 	db, err := gorm.Open("postgres", dataSource)
 	if err != nil {
